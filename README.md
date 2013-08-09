@@ -49,7 +49,6 @@ Available variables here;
 - $projecthost = Hostname of the project
 - $projectalis = Alternate alias hostname of the project
 - $projectpath = The absolute path the projects root folder
-
 - $adminUser = The MODX admin username
 - $adminPassword = The MODX admin password
 - $adminEmail = The MODX admin emailaddress
