@@ -96,7 +96,7 @@ your own hooks to load when running this installer.
 
 *For example;*
 If you always have the same MODX elements (such as categories,
-chunks, templates etc.), you can create a or multiple hooks to install
+chunks, templates etc.), you can create one or multiple hooks to install
 that elements for you all the time.
 
 ```no-highlight
