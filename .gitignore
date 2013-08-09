@@ -1,2 +1,2 @@
 includes/config.conf
-hooks/*.php
+hooks/*
