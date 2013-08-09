@@ -3,18 +3,22 @@ With additional options to customize and extend for your own needs.
 
 *Install installers*
 
+```no-highlight
 To configure this installers to work:
 - copy "includes/config.example.conf" to "includes/config.conf"
 - modify values in config.conf for your needs
+```
 
 *Commandline examples*
 
+```no-highlight
 - cd /to/your/path/with/the/installers/
 - php install-core.php
 - php install-packages.php
 
 And if you have any other hooks created;
 - php install-any.php
+```
 
 ***
 
