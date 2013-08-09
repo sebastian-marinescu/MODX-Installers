@@ -1,4 +1,9 @@
 <?php
+/**
+ * MODX ANYTHING ELSE INSTALLER
+ *
+ * @author Bert Oost at OostDesign.com <bert@oostdesign.com>
+ */
 
 require_once(dirname(__FILE__) . '/includes/initializer.php');
 

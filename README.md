@@ -79,7 +79,7 @@ Available variables here;
 - $defaultProvider = The default MODX core package provider
 - $productVersion = The version of your installed MODX
 
-*Available methods here;*
+Available methods here;
 
 downloadAndInstallPackage(
     $packageName, /* The name of the package to install, like "getResources" */
