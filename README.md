@@ -31,9 +31,10 @@ Note: all hooks are stored into the hooks/ folder.
 Anywhere you can use a readQuestion() method to 'ask'
 things commandline based. Usage:
 
-    $bool = readQuestion('This is a basic YES/NO question and returns boolean true or false');
-    $str = readQuestion('This way you can ask to input something', 'any');
-
+```no-highlight
+$bool = readQuestion('This is a basic YES/NO question and returns boolean true or false');
+$str = readQuestion('This way you can ask to input something', 'any');
+```
 
 **INSTALL CORE**
 
