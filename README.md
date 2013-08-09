@@ -16,6 +16,7 @@ To configure this installers to work:
 And if you have any other hooks created;
 - php install-any.php
 
+***
 
 Installer hooks
 =====================
