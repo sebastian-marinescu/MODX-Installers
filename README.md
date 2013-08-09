@@ -47,6 +47,7 @@ When you want to create some extra assets folders, you can add a file inside hoo
 install-core.CreateAssets.php
 This script can create the directories you want to create.
 
+```no-highlight
 Available variables here;
 - $projecthost = Hostname of the project
 - $projectalis = Alternate alias hostname of the project
@@ -54,7 +55,7 @@ Available variables here;
 - $adminUser = The MODX admin username
 - $adminPassword = The MODX admin password
 - $adminEmail = The MODX admin emailaddress
-
+```
 
 **INSTALL PACKAGES**
 
@@ -67,6 +68,7 @@ want to install some defaults your own.. You can do that with a hook!
 
 install-packages.MyPackages.php
 
+```no-highlight
 Available variables here;
 - $modx = The well known MODX instance
 - $projectpath = The absolute path the projects root folder
@@ -81,7 +83,7 @@ downloadAndInstallPackage(
 );
 
 It will return true or false if install is successful
-
+```
 
 **INSTALL ANYTHING ELSE!**
 
@@ -93,6 +95,8 @@ If you always have the same MODX elements (such as categories,
 chunks, templates etc.), you can create a or multiple hooks to install
 that elements for you all the time.
 
+```no-highlight
 Available variables here;
 - $modx = The well known MODX instance
 - $projectpath = The absolute path the projects root folder
+```
