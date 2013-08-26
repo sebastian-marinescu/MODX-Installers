@@ -29,7 +29,7 @@ if(!isset($adminPassword) || empty($adminPassword)) {
 // MODX admin email
 $adminEmail = $_config['modx']['email'];
 if(!isset($adminEmail) || empty($adminEmail)) {
-    $adminEmail = readQues/tion('Enter the admin MODX Manager emailaddress', 'any');
+    $adminEmail = readQuestion('Enter the admin MODX Manager emailaddress', 'any');
 }
 
 // Creating project root path
