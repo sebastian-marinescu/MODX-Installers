@@ -8,36 +8,31 @@ if(!file_exists($_configFile)) {
 
 // read config
 $_config = parse_ini_file($_configFile, true);
-
 if(empty($_config)) {
-    die(date('Y-m-d H:i:s').' [CONFIG ERROR] Your "includes/config.conf" is totally empty... do copy the sample contents and change the values!'."\n");
+    die(date('Y-m-d H:i:s').' [CONFIG ERROR] Your "includes/config.conf" is totally empty... please copy the sample config and change values where needed!'."\n");
 }
 
-// check mysql config
-if(!isset($_config['mysql']) || empty($_config['mysql'])) {
-    die(date('Y-m-d H:i:s').' [CONFIG ERROR] Cannot read any [mysql] section in your config... Please copy the example and change the mysql values!'."\n");
+if(!isset($_config['apacheCreateVHS']) || empty($_config['apacheCreateVHS'])) {
+    die(date('Y-m-d H:i:s').' [CONFIG ERROR] Apache Create VHS directive is missing... please copy the sample config and change values where needed!'."\n");
+}
+if(!isset($_config['nginxCreateVHS']) || empty($_config['nginxCreateVHS'])) {
+    die(date('Y-m-d H:i:s').' [CONFIG ERROR] NginX Create VHS directive is missing or empty... please copy the sample config and change values where needed!'."\n");
+}
+if(!isset($_config['projectsPath']) || empty($_config['projectsPath'])) {
+    die(date('Y-m-d H:i:s').' [CONFIG ERROR] Projects container path is missing or empty... please copy the sample config and change values where needed!'."\n");
 }
 
-if(empty($_config['mysql']) || empty($_config['mysql']['USER'])) {
-    die(date('Y-m-d H:i:s').' [ERROR] Cannot load your MySQL config in "includes/config.conf"... Please copy the example and enter your credentials!'."\n");
+if(!isset($_config['modx']) || !isset($_config['modx']['username']) || !isset($_config['modx']['password']) || !isset($_config['modx']['email'])) {
+    die(date('Y-m-d H:i:s').' [CONFIG ERROR] MODX block (or it\'s values) is missing... please copy the sample config and change values where needed!'."\n");
 }
 
-// check paths
-if(!isset($_config['paths']) || empty($_config['paths'])) {
-    die(date('Y-m-d H:i:s').' [CONFIG ERROR] Cannot read any [paths] section in your config... Please copy the example and change the path values!'."\n");
+if($_config['apacheCreateVHS'] == 'yes' && (!isset($_config['apache']) || !isset($_config['apache']['ACTIVE']) || !isset($_config['apache']['VHS']) || !isset($_config['apache']['RELOAD_CMD']))) {
+    die(date('Y-m-d H:i:s').' [CONFIG ERROR] APACHE block (or it\'s values) is missing... please copy the sample config and change values where needed!'."\n");
+}
+if($_config['nginxCreateVHS'] == 'yes' && (!isset($_config['nginx']) || !isset($_config['nginx']['ACTIVE']) || !isset($_config['nginx']['VHS']) || !isset($_config['nginx']['RELOAD_CMD']))) {
+    die(date('Y-m-d H:i:s').' [CONFIG ERROR] NGINX block (or it\'s values) is missing... please copy the sample config and change values where needed!'."\n");
 }
 
-if(!isset($_config['paths']['PROJECTS']) || empty($_config['paths']['PROJECTS']) || !is_dir($_config['paths']['PROJECTS'])) {
-    die(date('Y-m-d H:i:s').' [CONFIG ERROR] Cannot read "'.$_config['paths']['PROJECTS'].'"... Create it or change PROJECTS path to an accessible directory!'."\n");
-}
-
-if(strtolower($_config['apacheCreateVHS']) == 'yes') {
-
-    if(!isset($_config['paths']['VHS']) || empty($_config['paths']['VHS']) || !is_dir($_config['paths']['VHS'])) {
-        die(date('Y-m-d H:i:s').' [CONFIG ERROR] Cannot read "'.$_config['paths']['VHS'].'" path... Create it or change VHS path to an accessible directory!'."\n");
-    }
-
-    if(!is_writable($_config['paths']['VHS'])) {
-        die(date('Y-m-d H:i:s').' [CONFIG ERROR] The "'.$_config['paths']['VHS'].'" path is not writable for PHP command!'."\n");
-    }
+if(!isset($_config['mysql']) || !isset($_config['mysql']['HOST']) || !isset($_config['mysql']['USER']) || !isset($_config['mysql']['PASS'])) {
+    die(date('Y-m-d H:i:s').' [CONFIG ERROR] MYSQL block (or it\'s values) is missing... please copy the sample config and change values where needed!'."\n");
 }

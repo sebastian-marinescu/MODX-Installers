@@ -6,13 +6,13 @@ require_once(dirname(__FILE__).'/configcheck.php');
 // get some defaults
 $projectname = getopt("p:");
 if(!isset($projectname) || empty($projectname)) {
-    $projectname = readQuestion('Please enter a project folder (relative to: '.$_config['paths']['PROJECTS'].')', 'any');
+    $projectname = readQuestion('Please enter a project folder (relative to: '.$_config['projectsPath'].')', 'any');
     if(empty($projectname)) {
         die(date('Y-m-d H:i:s').' [INIT ERROR] Please specify a project directory... Installer aborted, try again!'."\n");
     }
 }
 
-$projectpath = $_config['paths']['PROJECTS'].rtrim($projectname, '/').'/';
+$projectpath = $_config['projectsPath'].rtrim($projectname, '/').'/';
 if(!isset($isNewInstall) || $isNewInstall === false) { // add new installs; below cannot be initialized!!
 
     if(!file_exists($projectpath)) {
@@ -35,7 +35,7 @@ if(!isset($isNewInstall) || $isNewInstall === false) { // add new installs; belo
         die(date('Y-m-d H:i:s').' [ERROR 503] MODX core cannot be loaded... Installer aborted, try again!'."\n");
     }
 
-    /* Create an instance of the modX class */
+    /** @var modX $modx An instance of the MODX class */
     $modx = new modX();
     if (!is_object($modx) || !($modx instanceof modX)) {
         @ob_end_flush();

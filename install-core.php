@@ -15,21 +15,17 @@ $projectalias = readQuestion('Enter project alias (eq. x.yourname.nl)', 'any');
 
 // MODX admin user
 $adminUser = $_config['modx']['username'];
-if(!isset($adminUser) || empty($adminUser)) {
-    $adminUser = readQuestion('Enter the admin MODX Manager username', 'any');
-}
+$adminUser = (!empty($adminUser)) ? $adminUser : 'admin';
 
 // MODX admin password
 $adminPassword = $_config['modx']['password'];
-if(!isset($adminPassword) || empty($adminPassword)) {
-    echo date('Y-m-d H:i:s').' [INFO] MODX password found empty in config... Generating new password!'."\n";
-    $adminPassword = generatePassword();
-}
+$adminPassword = (!empty($adminPassword)) ? $adminPassword : generatePassword();
 
 // MODX admin email
 $adminEmail = $_config['modx']['email'];
-if(!isset($adminEmail) || empty($adminEmail)) {
-    $adminEmail = readQuestion('Enter the admin MODX Manager emailaddress', 'any');
+//if(!isset($adminEmail) || empty($adminEmail)) {
+while(empty($adminEmail)) {
+    $adminEmail = readQuestion('Please enter the MODX Manager emailaddress', 'any');
 }
 
 // Creating project root path
@@ -38,22 +34,36 @@ mkdir($projectpath, 0755, true);
 chdir($projectpath); // moves PHP to project path
 $out = exec('cd '.$projectpath); // moves environment to project path
 
-// whether or not to create VHS
+// --------------------------
+// APACHE VHS
 if(strtolower($_config['apacheCreateVHS']) == 'yes') {
 
     // create virtualhost file
-    echo date('Y-m-d H:i:s').' [INFO] Creating VirtualHost file...'."\n";
+    echo date('Y-m-d H:i:s').' [INFO] Creating Apache VirtualHost file...'."\n";
 
-    $vhfileContents = "<VirtualHost *:80>\n
+    $tplFile = dirname(__FILE__).'/templates/vhs.apache.tpl';
+    if(!empty($projectalias)) {
+        $tplFile = dirname(__FILE__).'/templates/vhs.apache.alias.tpl';
+    }
+
+    if(file_exists($tplFile)) {
+        $vhfileContents = file_get_contents($tplFile);
+        $vhfileContents = str_replace('{projecthost}', $projecthost, $vhfileContents);
+        $vhfileContents = str_replace('{projectalias}', $projectalias, $vhfileContents);
+        $vhfileContents = str_replace('{projectpath}', $projectpath, $vhfileContents);
+    }
+    else {
+        $vhfileContents = "<VirtualHost *:80>\n
 \tServerName {$projecthost}\n".
 ((!empty($projectalias)) ? "\tServerAlias {$projectalias}\n" : '')
 ."\tDocumentRoot {$projectpath}\n
 </VirtualHost>";
+    }
 
-    $hostsfile = $_config['paths']['VHS'].$projecthost;
+    $hostsfile = $_config['apache']['VHS'].$projecthost;
     $idx = 1;
     while(file_exists($hostsfile)) {
-        $hostsfile = $_config['paths']['VHS'].$projecthost.'.'.$idx;
+        $hostsfile = $_config['apache']['VHS'].$projecthost.'.'.$idx;
         $idx++;
     }
 
@@ -62,11 +72,67 @@ if(strtolower($_config['apacheCreateVHS']) == 'yes') {
     fclose($fh);
 
     // time to reload Apache
-    echo date('Y-m-d H:i:s').' [INFO] Reloading Apache...'."\n";
-    if(isset($_config['apacheReloadCommand']) && !empty($_config['apacheReloadCommand'])) {
-        $out = exec($_config['apacheReloadCommand']);
-    } else {
-        $out = exec('/etc/init.d/apache2 reload');
+    if(isset($_config['apache']['ACTIVE']) && $_config['apache']['ACTIVE'] == 'yes') {
+        echo date('Y-m-d H:i:s').' [INFO] Reloading Apache...'."\n";
+        if(isset($_config['apache']['RELOAD_CMD']) && !empty($_config['apache']['RELOAD_CMD'])) {
+            $out = exec($_config['apache']['RELOAD_CMD']);
+        } else {
+            echo date('Y-m-d H:i:s').' [ERROR] Unable to reload Apache, please reload it yourself...'."\n";
+        }
+    }
+}
+
+// --------------------------
+// NGINX VHS
+if(strtolower($_config['nginxCreateVHS']) == 'yes') {
+
+    // create virtualhost file
+    echo date('Y-m-d H:i:s').' [INFO] Creating NginX server block (virtualhost) file...'."\n";
+
+    $tplFile = dirname(__FILE__).'/templates/vhs.nginx.tpl';
+    if(!empty($projectalias)) {
+        $tplFile = dirname(__FILE__).'/templates/vhs.nginx.alias.tpl';
+    }
+
+    if(file_exists($tplFile)) {
+        $vhfileContents = file_get_contents($tplFile);
+        $vhfileContents = str_replace('{projecthost}', $projecthost, $vhfileContents);
+        $vhfileContents = str_replace('{projectalias}', $projectalias, $vhfileContents);
+        $vhfileContents = str_replace('{projectpath}', $projectpath, $vhfileContents);
+    }
+    else {
+        $vhfileContents = "server {\n
+\tlisten 80;
+\tserver_name {$projecthost}".((!empty($projectalias)) ? " {$projectalias}" : '').";\n
+\troot {$projectpath};\n
+
+\tlocation / {
+\t\tif (!-e $request_filename) {
+\t\t\trewrite ^/(.*)$ /index.php?q=$1 last;
+\t\t}
+\t}
+}";
+    }
+
+    $hostsfile = $_config['nginx']['VHS'].$projecthost;
+    $idx = 1;
+    while(file_exists($hostsfile)) {
+        $hostsfile = $_config['nginx']['VHS'].$projecthost.'.'.$idx;
+        $idx++;
+    }
+
+    $fh = fopen($hostsfile, "w+");
+    fwrite($fh, $vhfileContents);
+    fclose($fh);
+
+    // time to reload Apache
+    if(isset($_config['nginx']['ACTIVE']) && $_config['nginx']['ACTIVE'] == 'yes') {
+        echo date('Y-m-d H:i:s').' [INFO] Reloading NginX...'."\n";
+        if(isset($_config['nginx']['RELOAD_CMD']) && !empty($_config['nginx']['RELOAD_CMD'])) {
+            $out = exec($_config['nginx']['RELOAD_CMD']);
+        } else {
+            echo date('Y-m-d H:i:s').' [ERROR] Unable to reload NginX, please reload it yourself...'."\n";
+        }
     }
 }
 

@@ -9,6 +9,16 @@ To configure this installers to work:
 - modify values in config.conf for your needs
 ```
 
+It's also possible to create template files for the Apache & NginX virtual hosts files.
+These files should be located in subfolder templates/ and should be named like;
+
+```no-highlight
+vhs.apache.tpl = The main Apache VirtualHost file
+vhs.apache.alias.tpl = The main Apache VirtualHost file !WITH! alias support
+vhs.nginx.tpl = The main NginX server block file
+vhs.nginx.alias.tpl = The main NginX server block file !WITH! alias support
+```
+
 *Commandline examples*
 
 ```no-highlight
@@ -96,7 +106,7 @@ your own hooks to load when running this installer.
 
 *For example;*
 If you always have the same MODX elements (such as categories,
-chunks, templates etc.), you can create one or multiple hooks to install
+chunks, templates etc.), you can create a or multiple hooks to install
 that elements for you all the time.
 
 ```no-highlight
