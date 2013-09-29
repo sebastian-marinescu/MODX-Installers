@@ -55,7 +55,7 @@ function generatePassword($length=12) {
  * @return bool
  */
 function loadHooks($topic, $suffix='.php') {
-    global $modx;
+    global $modx, $projectpath;
 
     if(empty($topic)) { return false; }
     foreach(glob(dirname(dirname(__FILE__)).'/hooks/'.$topic.'.*'.$suffix) as $file) {
