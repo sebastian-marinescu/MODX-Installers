@@ -182,7 +182,7 @@ $out = exec('wget -O modx.zip http://modx.com/download/latest/');
 echo date('Y-m-d H:i:s').' [INFO] Unzipping MODX package...'."\n";
 $out = exec('unzip modx.zip');
 
-$_ZDIR = exec('ls -F | grep "\/" | head -1');
+$_ZDIR = exec('ls -F | grep "\/" | grep "modx*" | head -1');
 if($_ZDIR == '/') {
     die(date('Y-m-d H:i:s').' [ERROR] Cannot find unzipped MODX folder...'."\n");
 }
